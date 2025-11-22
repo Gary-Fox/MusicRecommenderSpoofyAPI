@@ -23,7 +23,7 @@ public class PopularityBasedStrategy implements RecommendationStrategy {
         System.out.println("Finding popular tracks similar to: " + seedTrack.getName());
 
         // Search for tracks from the same artist
-        String artistQuery = seedTrack.getArtists().get(0);
+        String artistQuery = seedTrack.getArtists().getName();
         List<Track> candidateTracks = apiClient.searchTracks(artistQuery, Config.TRACK_POOL_SIZE);
 
         // Sort by popularity and exclude the seed track

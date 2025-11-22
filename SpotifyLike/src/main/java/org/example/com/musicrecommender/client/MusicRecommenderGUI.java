@@ -148,7 +148,7 @@ public class MusicRecommenderGUI extends JFrame {
     private void initializeConnection() {
         serverConnection = new ServerConnection();
         try {
-            serverConnection.connect();
+            serverConnection.robustConnect();
             updateStatus("Connected to server");
         } catch (IOException e) {
             showError("Failed to connect to server: " + e.getMessage());
@@ -293,9 +293,9 @@ public class MusicRecommenderGUI extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        ServerConnection sc = new ServerConnection();
-        sc.connect();                 // must succeed
-        var tracks = sc.searchTracks("daft punk");
+        //ServerConnection sc = new ServerConnection();
+        //sc.robustConnect();                 // must succeed
+        //var tracks = sc.searchTracks("daft punk");
 
 
         // Create and show GUI on Event Dispatch Thread

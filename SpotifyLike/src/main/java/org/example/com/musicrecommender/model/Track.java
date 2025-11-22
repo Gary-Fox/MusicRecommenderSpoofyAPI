@@ -13,7 +13,7 @@ import java.util.Objects;
 public class Track {
     private String id;
     private String name;
-    private List<String> artists;
+    private Artist artists;
     private String albumName;
     private int durationMs;
     private int popularity;
@@ -21,7 +21,7 @@ public class Track {
     private org.example.com.musicrecommender.model.AudioFeatures audioFeatures;
 
     // Constructor
-    public Track(String id, String name, List<String> artists, String albumName) {
+    public Track(String id, String name, Artist artists, String albumName) {
         this.id = id;
         this.name = name;
         this.artists = artists;
@@ -45,11 +45,11 @@ public class Track {
         this.name = name;
     }
 
-    public List<String> getArtists() {
+    public Artist getArtists() {
         return artists;
     }
 
-    public void setArtists(List<String> artists) {
+    public void setArtists(Artist artists) {
         this.artists = artists;
     }
 
@@ -98,7 +98,7 @@ public class Track {
     @Override
     public String toString() {
         return String.format("%s - %s (%s)",
-                String.join(", ", artists), name, albumName);
+                String.join(", ", artists.getName()), name, albumName);
     }
 
     public String getFormattedDuration() {

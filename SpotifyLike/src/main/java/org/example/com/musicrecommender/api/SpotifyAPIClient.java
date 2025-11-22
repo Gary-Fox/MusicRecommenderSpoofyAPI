@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.apache.hc.core5.http.ParseException;
 import org.example.com.musicrecommender.config.Config;
+import org.example.com.musicrecommender.model.Artist;
 import org.example.com.musicrecommender.model.Track;
 import org.example.com.musicrecommender.model.AudioFeatures;
 
@@ -20,9 +21,8 @@ import org.apache.hc.core5.http.io.entity.StringEntity;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
+import java.util.*;
+import java.util.Random;
 
 /**
  * REST API Client for Spotify Web API
@@ -88,137 +88,193 @@ public class SpotifyAPIClient {
         }
     }
 
-    /**
-     * Parse Track objects from JSON search response
-     */
-    private List<Track> parseTracksFromSearchResponse(String jsonResponse) {
-        List<Track> tracks = new ArrayList<>();
-        JsonObject root = JsonParser.parseString(jsonResponse).getAsJsonObject();
+    public List<Track> randomSearch(int limit) throws IOException, ParseException
+    {
+        //A map of the entire alphabet with integer keys
+        HashMap<Integer, String> Alphabet = new HashMap<Integer, String>();
+        Alphabet.put(1, "a");
+        Alphabet.put(2, "b");
+        Alphabet.put(3, "c");
+        Alphabet.put(4, "d");
+        Alphabet.put(5, "e");
+        Alphabet.put(6, "f");
+        Alphabet.put(7, "g");
+        Alphabet.put(8, "h");
+        Alphabet.put(9, "i");
+        Alphabet.put(10, "j");
+        Alphabet.put(11, "k");
+        Alphabet.put(12, "l");
+        Alphabet.put(13, "m");
+        Alphabet.put(14, "n");
+        Alphabet.put(15, "o");
+        Alphabet.put(16, "p");
+        Alphabet.put(17, "q");
+        Alphabet.put(18, "r");
+        Alphabet.put(19, "s");
+        Alphabet.put(20, "t");
+        Alphabet.put(21, "u");
+        Alphabet.put(22, "v");
+        Alphabet.put(23, "w");
+        Alphabet.put(24, "x");
+        Alphabet.put(25, "y");
+        Alphabet.put(26, "z");
 
-        if (!root.has("tracks")) {
-            return tracks;
-        }
+        //Random number generation
+        Random rand = new Random();
+        Integer num = rand.nextInt(1, 27);
+        //Using the rng as a key to get a random character(as a string)
+        String query = Alphabet.get(num);
+        //Re-using code
+        //return searchTracks(query,limit);
+        return null;
+    }
+}
 
-        JsonArray items = root.getAsJsonObject("tracks").getAsJsonArray("items");
+/**
+ * Parse Track objects from JSON search response
+ */
+private List<Track> parseTracksFromSearchResponse(String jsonResponse) {
+    List<Track> tracks = new ArrayList<>();
+    JsonObject root = JsonParser.parseString(jsonResponse).getAsJsonObject();
 
-        for (JsonElement element : items) {
-            JsonObject item = element.getAsJsonObject();
-            Track track = parseTrackFromJson(item);
-            tracks.add(track);
-        }
-
+    if (!root.has("tracks")) {
         return tracks;
     }
 
-    private Track parseTrackFromJson(JsonObject json) {
-        String id = json.get("id").getAsString();
-        String name = json.get("name").getAsString();
+    JsonArray items = root.getAsJsonObject("tracks").getAsJsonArray("items");
 
-        List<String> artists = new ArrayList<>();
-        JsonArray artistsArray = json.getAsJsonArray("artists");
-        for (JsonElement artistElement : artistsArray) {
-            artists.add(artistElement.getAsJsonObject().get("name").getAsString());
-        }
-
-        String albumName = json.getAsJsonObject("album").get("name").getAsString();
-
-        Track track = new Track(id, name, artists, albumName);
-        track.setDurationMs(json.get("duration_ms").getAsInt());
-        track.setPopularity(json.get("popularity").getAsInt());
-
-        if (json.has("preview_url") && !json.get("preview_url").isJsonNull()) {
-            track.setPreviewUrl(json.get("preview_url").getAsString());
-        }
-
-        return track;
+    for (JsonElement element : items) {
+        JsonObject item = element.getAsJsonObject();
+        Track track = parseTrackFromJson(item);
+        tracks.add(track);
     }
 
-    /**
-     * Get audio features for a specific track
-     * This is the KEY method for building recommendations!
-     */
-    public AudioFeatures getAudioFeatures(String trackId) throws IOException {
-        ensureValidToken();
+    return tracks;
+}
 
-        String url = String.format("%s/audio-features/%s", Config.API_BASE_URL, trackId);
+private Track parseTrackFromJson(JsonObject json) {
+    String id = json.get("id").getAsString();
+    String name = json.get("name").getAsString();
+
+    List<String> artists = new ArrayList<>();
+    List<String> genres = new ArrayList<>();
+    List<String> artistID = new ArrayList<>();
+    List<Integer> artistFollower = new ArrayList<>();
+    List<Integer> artistPopularity = new ArrayList<>();
+    JsonArray artistsArray = json.getAsJsonArray("artists");
+
+    for (JsonElement artistElement : artistsArray) {
+        artists.add(artistElement.getAsJsonObject().get("name").getAsString());
+        artistID.add(artistElement.getAsJsonObject().get("id").getAsString());
+        genres.add(artistElement.getAsJsonObject().get("genre").getAsString());
+        artistFollower.add(artistElement.getAsJsonObject().get("followers").getAsInt());
+        artistPopularity.add(artistElement.getAsJsonObject().get("popularity").getAsInt());
+    }
+
+    String albumName = json.getAsJsonObject("album").get("name").getAsString();
+
+    Artist artistsObj = new Artist( artistID.getFirst(), artists.getFirst() );
+    artistsObj.setGenres(Collections.singletonList(genres.getFirst()));
+    artistsObj.setFollowers(artistFollower.getFirst());
+    artistsObj.setPopularity(artistPopularity.getFirst());
+
+    Track track = new Track(id, name, artistsObj, albumName);
+    track.setDurationMs(json.get("duration_ms").getAsInt());
+    track.setPopularity(json.get("popularity").getAsInt());
+
+    if (json.has("preview_url") && !json.get("preview_url").isJsonNull()) {
+        track.setPreviewUrl(json.get("preview_url").getAsString());
+    }
+
+    return track;
+}
+
+/**
+ * Get audio features for a specific track
+ * This is the KEY method for building recommendations!
+ */
+public AudioFeatures getAudioFeatures(String trackId) throws IOException {
+    ensureValidToken();
+
+    String url = String.format("%s/audio-features/%s", Config.API_BASE_URL, trackId);
+
+    HttpGet httpGet = new HttpGet(url);
+    httpGet.setHeader("Authorization", "Bearer " + accessToken);
+
+    try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+        String jsonResponse = EntityUtils.toString(response.getEntity());
+        JsonObject json = JsonParser.parseString(jsonResponse).getAsJsonObject();
+
+        AudioFeatures features = new AudioFeatures(trackId);
+        features.setDanceability(json.get("danceability").getAsDouble());
+        features.setEnergy(json.get("energy").getAsDouble());
+        features.setValence(json.get("valence").getAsDouble());
+        features.setTempo(json.get("tempo").getAsDouble());
+        features.setAcousticness(json.get("acousticness").getAsDouble());
+        features.setInstrumentalness(json.get("instrumentalness").getAsDouble());
+        features.setLiveness(json.get("liveness").getAsDouble());
+        features.setSpeechiness(json.get("speechiness").getAsDouble());
+        features.setKey(json.get("key").getAsInt());
+        features.setMode(json.get("mode").getAsInt());
+
+        return features;
+    } catch (ParseException e) {
+        throw new RuntimeException(e);
+    }
+}
+
+/**
+ * Get audio features for multiple tracks in batch
+ * More efficient than individual requests
+ */
+public List<AudioFeatures> getBatchAudioFeatures(List<String> trackIds) throws IOException, ParseException {
+    ensureValidToken();
+
+    // Spotify allows max 100 IDs per request
+    List<AudioFeatures> allFeatures = new ArrayList<>();
+
+    for (int i = 0; i < trackIds.size(); i += 100) {
+        int end = Math.min(i + 100, trackIds.size());
+        List<String> batch = trackIds.subList(i, end);
+        String ids = String.join(",", batch);
+
+        String url = String.format("%s/audio-features?ids=%s", Config.API_BASE_URL, ids);
 
         HttpGet httpGet = new HttpGet(url);
         httpGet.setHeader("Authorization", "Bearer " + accessToken);
 
         try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
             String jsonResponse = EntityUtils.toString(response.getEntity());
-            JsonObject json = JsonParser.parseString(jsonResponse).getAsJsonObject();
+            JsonObject root = JsonParser.parseString(jsonResponse).getAsJsonObject();
+            JsonArray features = root.getAsJsonArray("audio_features");
 
-            AudioFeatures features = new AudioFeatures(trackId);
-            features.setDanceability(json.get("danceability").getAsDouble());
-            features.setEnergy(json.get("energy").getAsDouble());
-            features.setValence(json.get("valence").getAsDouble());
-            features.setTempo(json.get("tempo").getAsDouble());
-            features.setAcousticness(json.get("acousticness").getAsDouble());
-            features.setInstrumentalness(json.get("instrumentalness").getAsDouble());
-            features.setLiveness(json.get("liveness").getAsDouble());
-            features.setSpeechiness(json.get("speechiness").getAsDouble());
-            features.setKey(json.get("key").getAsInt());
-            features.setMode(json.get("mode").getAsInt());
+            for (JsonElement element : features) {
+                if (element.isJsonNull()) continue;
 
-            return features;
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-    }
+                JsonObject json = element.getAsJsonObject();
+                AudioFeatures af = new AudioFeatures(json.get("id").getAsString());
+                af.setDanceability(json.get("danceability").getAsDouble());
+                af.setEnergy(json.get("energy").getAsDouble());
+                af.setValence(json.get("valence").getAsDouble());
+                af.setTempo(json.get("tempo").getAsDouble());
+                af.setAcousticness(json.get("acousticness").getAsDouble());
+                af.setInstrumentalness(json.get("instrumentalness").getAsDouble());
+                af.setLiveness(json.get("liveness").getAsDouble());
+                af.setSpeechiness(json.get("speechiness").getAsDouble());
+                af.setKey(json.get("key").getAsInt());
+                af.setMode(json.get("mode").getAsInt());
 
-    /**
-     * Get audio features for multiple tracks in batch
-     * More efficient than individual requests
-     */
-    public List<AudioFeatures> getBatchAudioFeatures(List<String> trackIds) throws IOException, ParseException {
-        ensureValidToken();
-
-        // Spotify allows max 100 IDs per request
-        List<AudioFeatures> allFeatures = new ArrayList<>();
-
-        for (int i = 0; i < trackIds.size(); i += 100) {
-            int end = Math.min(i + 100, trackIds.size());
-            List<String> batch = trackIds.subList(i, end);
-            String ids = String.join(",", batch);
-
-            String url = String.format("%s/audio-features?ids=%s", Config.API_BASE_URL, ids);
-
-            HttpGet httpGet = new HttpGet(url);
-            httpGet.setHeader("Authorization", "Bearer " + accessToken);
-
-            try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
-                String jsonResponse = EntityUtils.toString(response.getEntity());
-                JsonObject root = JsonParser.parseString(jsonResponse).getAsJsonObject();
-                JsonArray features = root.getAsJsonArray("audio_features");
-
-                for (JsonElement element : features) {
-                    if (element.isJsonNull()) continue;
-
-                    JsonObject json = element.getAsJsonObject();
-                    AudioFeatures af = new AudioFeatures(json.get("id").getAsString());
-                    af.setDanceability(json.get("danceability").getAsDouble());
-                    af.setEnergy(json.get("energy").getAsDouble());
-                    af.setValence(json.get("valence").getAsDouble());
-                    af.setTempo(json.get("tempo").getAsDouble());
-                    af.setAcousticness(json.get("acousticness").getAsDouble());
-                    af.setInstrumentalness(json.get("instrumentalness").getAsDouble());
-                    af.setLiveness(json.get("liveness").getAsDouble());
-                    af.setSpeechiness(json.get("speechiness").getAsDouble());
-                    af.setKey(json.get("key").getAsInt());
-                    af.setMode(json.get("mode").getAsInt());
-
-                    allFeatures.add(af);
-                }
+                allFeatures.add(af);
             }
         }
-
-        return allFeatures;
     }
 
-    public void close() throws IOException {
-        if (httpClient != null) {
-            httpClient.close();
-        }
+    return allFeatures;
+}
+
+public void close() throws IOException {
+    if (httpClient != null) {
+        httpClient.close();
     }
+}
 }

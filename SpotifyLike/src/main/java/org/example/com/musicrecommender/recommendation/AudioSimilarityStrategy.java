@@ -28,7 +28,7 @@ public class AudioSimilarityStrategy implements RecommendationStrategy {
 
 
         // Step 2: Search for candidate tracks from the same artist
-        String artistQuery = seedTrack.getArtists().get(0);
+        String artistQuery = seedTrack.getArtists().getName();
         List<Track> candidateTracks = apiClient.searchTracks(artistQuery, Config.TRACK_POOL_SIZE);
 
         // Step 3: Get audio features for all candidate tracks

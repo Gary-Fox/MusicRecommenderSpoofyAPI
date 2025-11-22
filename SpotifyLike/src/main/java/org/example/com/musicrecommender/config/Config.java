@@ -11,14 +11,17 @@ public class Config
     public static final String API_BASE_URL = "https://api.spotify.com/v1";
 
     // Server Configuration
-    public static final int SERVER_PORT = 8080;
+   /* public static final int SERVER_PORT = 8800;
     public static final String SERVER_HOST = System.getProperty("SERVER_HOST",
             System.getenv().getOrDefault("SERVER_HOST", "127.0.0.1"));
+
+    */
+    public static final int SERVER_PORT = 8080; // <- set this to your real server port
+    public static final String SERVER_HOST = "127.0.0.1";
 
     // Tracks to analyze for recommendations
     public static final int TRACK_POOL_SIZE = 50;
     public static final int DEFAULT_RECOMMENDATIONS = 10;
-
 
 
 }

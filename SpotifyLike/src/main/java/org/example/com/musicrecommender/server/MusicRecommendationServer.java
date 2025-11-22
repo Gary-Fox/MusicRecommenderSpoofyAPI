@@ -32,8 +32,13 @@ public class MusicRecommendationServer {
 
         running = true;
 
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
-            System.out.println("Music Recommendation Server started on port " + port);
+        // Bind explicitly to host + port so there’s no ambiguity
+        String bindHost = Config.SERVER_HOST;     // e.g., "127.0.0.1"
+        int    bindPort = this.port;              // typically Config.SERVER_PORT
+
+        try (ServerSocket serverSocket = new ServerSocket()) {
+            serverSocket.bind(new java.net.InetSocketAddress(bindHost, bindPort));
+            System.out.printf("Music Recommendation Server listening on %s:%d%n", bindHost, bindPort);
             System.out.println("Waiting for client connections...");
 
             while (running) {
@@ -45,6 +50,7 @@ public class MusicRecommendationServer {
             shutdown();
         }
     }
+
 
     public void shutdown() {
         running = false;

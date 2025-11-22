@@ -4,9 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import org.example.com.musicrecommender.api.SpotifyAPIClient;
 import org.apache.hc.core5.http.ParseException;
+import org.example.com.musicrecommender.model.Artist;
 import org.example.com.musicrecommender.model.Track;
 import org.example.com.musicrecommender.recommendation.AudioSimilarityStrategy;
 import org.example.com.musicrecommender.recommendation.RecommendationEngine;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -106,14 +108,14 @@ public class ClientHandler implements Runnable {
             // Get the seed track details
             String trackId = request.get("trackId").getAsString();
             String trackName = request.get("trackName").getAsString();
-            String trackArtist = request.get("trackArtist").getAsString();
+            Artist trackArtist = new Artist(request.get("trackArtist").getAsString(), request.get("trackArtistID").getAsString());
             String trackAlbum = request.get("trackAlbum").getAsString();
 
             int count = request.has("count") ? request.get("count").getAsInt() : 10;
 
             // Create seed track object
             Track seedTrack = new Track(trackId, trackName,
-                    List.of(trackArtist), trackAlbum);
+                    trackArtist, trackAlbum);
 
             // Get recommendations using our custom algorithm
             List<Track> recommendations = recommendationEngine.getRecommendations(
