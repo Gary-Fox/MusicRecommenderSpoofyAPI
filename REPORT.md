@@ -1,12 +1,12 @@
 # Project Report
 
 ## Challenges:
-**Challenge 1: ///**
+**Challenge 1: /**
 Problem: There was a method that required a track-type variable and was instead given a string. The method was trying to identify a track based off it's ID number.
 Solution: Removed the call for ID number, since the object calling for it was already the track in question.
 Learned: Sometimes a solution is as simple as deleting a small tidbit of code, and it's best to look for simple soluitions over convoluded ones (such as converting the string to a track, or trying to gather a track from the string.)
 
-**Challenge 2: ///**
+**Challenge 2: /**
 Problem: 
 Solution: 
 Learned: 
@@ -22,4 +22,4 @@ Asked: Yes
 Modified: Yes
 Verified: Yes
 
-## Time Spent: 6 hours, probably.///
+## Time Spent: 6 hours, probably.
