@@ -128,7 +128,7 @@ public class SpotifyAPIClient {
         //return searchTracks(query,limit);
         return null;
     }
-}
+
 
 /**
  * Parse Track objects from JSON search response
@@ -277,4 +277,5 @@ public void close() throws IOException {
         httpClient.close();
     }
 }
+
 }
