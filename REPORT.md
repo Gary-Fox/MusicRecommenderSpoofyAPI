@@ -24,9 +24,9 @@ Learned: Work smarter not harder.
 ## Design Pattern Justifications
 **Strategy Pattern: Strategies were modeled after lab documents provided to us by our instructor. Genre strategy is self explanitory, simply utalizing data gatherd from tracks and matching it as closely as possible to the searched/desired track. We also added a slight popularity modifier, just to add some priority over the potential 1,000 alternative pop rock songs. The hybrid strategy would have employed a random precentage weight of popularity, simularity, and genre, with popularity being the heaviest bias.** 
 
-**Factory Pattern: I neither now what this is or how it may or may not exist within our program.** 
+**Factory Pattern: I neither know what this is or how it may or may not exist within our program.** 
 
-**Observer Pattern: I neither now what this is or how it may or may not exist within our program.** 
+**Observer Pattern: I neither know what this is or how it may or may not exist within our program.** 
 
 ## AI Usage
 Used ChatGPT to help debug code
