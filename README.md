@@ -18,4 +18,4 @@
 - Strategy: Different methods of reccomending music to the user
 - Factory: API implemntation
 
-## Demo: [video link]
+## Demo: [(https://drive.google.com/file/d/1VF_yjnLQcyDye8YBBVt56HN2zks1nyuW/view?usp=sharing)]
