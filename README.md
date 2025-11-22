@@ -1,7 +1,5 @@
 # Spotify Music Recommender
 
-# Project Title
-
 ## Setup
 1. The program does not currently work.
 2. If you wish to attempt, you must first open up the folder in a Java-based IDE
