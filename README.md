@@ -4,7 +4,9 @@
 
 ## Setup
 1. The program does not currently work.
-2. If you wish to attempt, you must open up the folder in a Java-based IDE, and then run the main method in `org.example.com.musicrecommender.client.MusicRecommenderGUI`
+2. If you wish to attempt, you must first open up the folder in a Java-based IDE
+3. Assign two environment variables: CLI_ID for your client ID, and CLISEC for your Client Secret.
+4. Finally run the main method in `org.example.com.musicrecommender.client.MusicRecommenderGUI`
 
 ## Features
 - [x] Reccomends music based on user search and spotify API data
