@@ -12,9 +12,14 @@ Solution:
 Learned:
 
 **Challenge 3: **
-Problem: 
-Solution: 
-Learned:
+Problem: A depreciated method was utalized in the code to gather all of the private variables of a track
+Solution: We removed the depreciated code, and replaced it with code that already did the same thing.
+Learned: The work of a programmer is never done. Also always keep up to date on all documentation for APIs you intend to use.
+
+**Challenge 5: **
+Problem: There were many issues involving the IDE not running the program due to a lack of try/catch statements.
+Solution: Utalize IntellJ's built in dev tools to automatically add such statements to our code seamlessly.
+Learned: Work smarter not harder.
 
 ## Design Pattern Justifications
 **Strategy Pattern: Strategies were modeled after lab documents provided to us by our instructor. Genre strategy is self explanitory, simply utalizing data gatherd from tracks and matching it as closely as possible to the searched/desired track. We also added a slight popularity modifier, just to add some priority over the potential 1,000 alternative pop rock songs. The hybrid strategy would have employed a random precentage weight of popularity, simularity, and genre, with popularity being the heaviest bias.** 
