@@ -3,8 +3,8 @@ package org.example.com.musicrecommender.config;
 public class Config
 {
     // Replace with your Spotify credentials
-    public static final String CLIENT_ID = "da611c839f7f482da097b710f5ec32d3";
-    public static final String CLIENT_SECRET = "6779aae23a374fdda441f34cad01c2a1";
+    public static final String CLIENT_ID = System.getenv("CLI_ID");
+    public static final String CLIENT_SECRET = System.getenv("CLISEC");
 
     // API Endpoints
     public static final String TOKEN_URL = "https://accounts.spotify.com/api/token";
@@ -18,6 +18,7 @@ public class Config
     // Tracks to analyze for recommendations
     public static final int TRACK_POOL_SIZE = 50;
     public static final int DEFAULT_RECOMMENDATIONS = 10;
+
 
 
 }
